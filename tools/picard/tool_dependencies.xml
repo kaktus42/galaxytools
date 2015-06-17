@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="picard" version="1.134">
+        <repository name="package_picard_1_134" owner="avowinkel" />
+    </package>
+</tool_dependency>
