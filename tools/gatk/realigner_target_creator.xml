@@ -1,0 +1,35 @@
+<macros>
+    <xml name="RealignerTargetCreatorAnalysis">
+        <expand macro="analysis_type_conditional">
+            <param name="maxIntervalSize" type="integer" value="500" label="maximum interval size; any intervals larger than this value will be dropped" help="-maxInterval,--maxIntervalSize &amp;lt;maxIntervalSize&amp;gt;" />
+            <param name="minReadsAtLocus" type="integer" value="4" label="minimum reads at a locus to enable using the entropy calculation" help="-minReads,--minReadsAtLocus &amp;lt;minReadsAtLocus&amp;gt;" />
+            <param name="windowSize" type="integer" value="10" label="window size for calculating entropy or SNP clusters" help="-window,--windowSize &amp;lt;windowSize&amp;gt;" />
+
+            <param name="mismatchFraction" type="float" value="0.0" label="fraction of base qualities needing to mismatch for a position to have high entropy" help="-mismatch,--mismatchFraction &amp;lt;mismatchFraction&amp;gt;" />
+            <repeat name="rod_bindings" title="Input VCF files with known indels" help="-known,--known &amp;lt;known&amp;gt;">
+                <param name="input_rod" type="data" format="vcf" label="Variant file (VCF format)" />
+            </repeat>
+        </expand>
+    </xml>
+
+    <template name="RealignerTargetCreatorPreprocessing">
+<![CDATA[
+        #for $i, $rod_binding in enumerate($analysis_type.analysis_param_type.rod_bindings):
+            ln -s -f ${rod_binding.input_rod} rod_binding_${i}.bam &&
+        #end for
+]]>
+    </template>
+
+    <template name="RealignerTargetCreatorOptions">
+<![CDATA[
+        --maxIntervalSize       ${analysis_type.analysis_param_type.maxIntervalSize}
+        --minReadsAtLocus       ${analysis_type.analysis_param_type.minReadsAtLocus}
+        --windowSize            ${analysis_type.analysis_param_type.windowSize}
+        --mismatchFraction      ${analysis_type.analysis_param_type.mismatchFraction}
+
+        #for $i, $rod_binding in enumerate($analysis_type.analysis_param_type.rod_bindings):
+            --known rod_binding_${i}.bam
+        #end for
+]]>
+    </template>
+</macros>

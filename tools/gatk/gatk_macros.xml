@@ -1,0 +1,37 @@
+<macros>
+
+  <xml name="requirements">
+    <requirements>
+      <requirement type="package">gatk</requirement>
+      <requirement type="set_environment">GATK2_PATH</requirement>
+      <requirement type="set_environment">GATK2_SITE_OPTIONS</requirement>
+      <yield />
+    </requirements>
+  </xml>
+  <xml name="version_command">
+    <version_command>@GATK_EXEC@ --help|grep '^The Genome'</version_command>
+  </xml>
+  <token name="@VERSION@">3.4-0</token>
+  <token name="@GATK_EXEC@">
+    java -jar "\$GATK2_PATH/GenomeAnalysisTK.jar"
+  </token>
+  <token name="@THREADS@">
+    --num_threads \${GALAXY_SLOTS:-4}
+  </token>
+
+  <xml name="analysis_type_conditional">
+    <conditional name="analysis_param_type">
+      <param name="analysis_param_type_selector" type="select" label="Basic or Advanced Analysis options">
+        <option value="basic" selected="True">Basic</option>
+        <option value="advanced">Advanced</option>
+      </param>
+      <when value="basic">
+        <!-- Do nothing here -->
+      </when>
+      <when value="advanced">
+        <yield />
+      </when>
+    </conditional>
+  </xml>
+
+</macros>
