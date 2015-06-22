@@ -12,6 +12,7 @@
     <version_command>@GATK_EXEC@ --help|grep '^The Genome'</version_command>
   </xml>
   <token name="@VERSION@">3.4-0</token>
+  <!--token name="@OUTPUT_NAME_PREFIX@">${tool.name} - ${analysis_type.analysis_type_selector}</token-->
   <token name="@GATK_EXEC@">
     java -jar "\$GATK2_PATH/GenomeAnalysisTK.jar"
   </token>
@@ -19,16 +20,19 @@
     --num_threads \${GALAXY_SLOTS:-4}
   </token>
 
-  <xml name="analysis_type_conditional">
-    <conditional name="analysis_param_type">
-      <param name="analysis_param_type_selector" type="select" label="Basic or Advanced Analysis options">
-        <option value="basic" selected="True">Basic</option>
-        <option value="advanced">Advanced</option>
-      </param>
-      <when value="basic">
-        <!-- Do nothing here -->
+  <xml name="macro_optional_parameters">
+    <conditional name="optional_parameters">
+      <param name="optional_parameters_enabled" type="boolean" label="Configure Optional Parameters" />
+      <when value="true">
+        <yield />
       </when>
-      <when value="advanced">
+    </conditional>
+  </xml>
+
+  <xml name="macro_advanced_parameters">
+    <conditional name="advanced_parameters">
+      <param name="advanced_parameters_enabled" type="boolean" label="Configure Advanced Parameters" />
+      <when value="true">
         <yield />
       </when>
     </conditional>

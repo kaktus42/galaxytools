@@ -1,0 +1,87 @@
+<macros>
+    <xml name="IndelRealignerParameters">
+
+        <param name="targetIntervals" type="data" format="gatk_interval" label="Intervals file output from RealignerTargetCreator" help="-targetIntervals,--targetIntervals &amp;lt;targetIntervals&amp;gt;" />
+        
+
+        <expand macro="macro_optional_parameters">
+            <repeat name="knownAlleles" title="Input VCF file(s) with known indels" help="-known,--knownAlleles &amp;lt;knownAlleles&amp;gt;">
+                <param name="knownAllele" type="data" format="vcf" label="Variant file (VCF format)" />
+            </repeat>
+            
+            <param name="consensusDeterminationModel" type="select" label="minimum reads at a locus to enable using the entropy calculation" help="-model,--consensusDeterminationModel &amp;lt;consensusDeterminationModel&amp;gt;">
+                <option value="USE_READS">USE_READS - Additionally uses indels already present in the original alignments of the reads</option>
+                <option value="KNOWNS_ONLY">KNOWNS_ONLYS - Uses only indels from a provided ROD of known indels</option>
+                <option value="USE_SW">USE_SW - Additionally uses 'Smith-Waterman' to generate alternate consenses</option>
+            </param>
+            <param name="LODThresholdForCleaning" type="float" value="5.0" label="LOD threshold above which the cleaner will clean" help="-LOD,--LODThresholdForCleaning &amp;lt;LODThresholdForCleaning&amp;gt;" />
+            <!--param name="nWayOut" type="float" value="5.0" label="Generate one output file for each input (-I) bam file (not compatible with -output)" help="-nWayOut,&#45;&#45;nWayOut &amp;lt;nWayOut&amp;gt;" /-->
+        </expand>
+
+
+        <expand macro="macro_advanced_parameters">
+            <param name="entropyThreshold" type="float" value="0.15" label="Percentage of mismatches at a locus to be considered having high entropy (0.0 &lt; entropy &lt;= 1.0)" help="-entropy,--entropyThreshold &amp;lt;entropyThreshold&amp;gt;" />
+
+            <param name="maxConsensuses" type="integer" value="30" label="Max alternate consensuses to try (necessary to improve performance in deep coverage)" help="-maxConsensuses,--maxConsensuses &amp;lt;maxConsensuses&amp;gt;" />
+
+            <param name="maxIsizeForMovement" type="integer" value="3000" label="maximum insert size of read pairs that we attempt to realign" help="-maxIsize,--maxIsizeForMovement &amp;lt;maxIsizeForMovement&amp;gt;" />
+
+            <param name="maxPositionalMoveAllowed" type="integer" value="200" label="Maximum positional move in basepairs that a read can be adjusted during realignment" help="-maxPosMove,--maxPositionalMoveAllowed &amp;lt;maxPositionalMoveAllowed&amp;gt;" />
+
+            <param name="maxReadsForConsensuses" type="integer" value="120" label="Max reads used for finding the alternate consensuses (necessary to improve performance in deep coverage)" help="-greedy,--maxReadsForConsensuses &amp;lt;maxReadsForConsensuses&amp;gt;" />
+
+            <param name="maxReadsForRealignment" type="integer" value="20000" label="Max reads allowed at an interval for realignment" help="-maxReads,--maxReadsForRealignment &amp;lt;maxReadsForRealignment&amp;gt;" />
+
+            <param name="maxReadsInMemory" type="integer" value="150000" label="max reads allowed to be kept in memory at a time by the SAMFileWriter" help="-maxInMemory,--maxReadsInMemory &amp;lt;maxReadsInMemory&amp;gt;" />
+
+            <param name="noOriginalAlignmentTags" type="boolean" truevalue="--noOriginalAlignmentTags" falsevalue="" label="Don't output the original cigar or alignment start tags for each realigned read in the output bam" help="-noTags,--noOriginalAlignmentTags" />
+        </expand>
+
+    </xml>
+
+    <xml name="IndelRealignerOutput">
+        <data format="bam" name="output_bam" label="${tool.name} - ${analysis_type.analysis_type_selector} on ${on_string} (BAM)">
+            <yield />
+        </data>
+    </xml>
+
+    <template name="IndelRealignerPreprocessing">
+<![CDATA[
+        ln -s -f ${analysis_type.targetIntervals} target.intervals &&
+
+        #if $analysis_type.optional_parameters.optional_parameters_enabled
+            #for $i, $knownAllele in enumerate($analysis_type.optional_parameters.knownAlleles):
+                ln -s -f ${knownAllele.knownAllele} knownAllele_${i}.vcf &&
+            #end for
+        #end if
+]]>
+    </template>
+
+    <template name="IndelRealignerOptions">
+<![CDATA[
+        --out                   ${output_bam}
+
+        --targetIntervals       target.intervals
+
+
+        #if $analysis_type.optional_parameters.optional_parameters_enabled
+            #for $i, $knownAllele in enumerate($analysis_type.optional_parameters.knownAlleles):
+                --knownAlleles knownAllele_${i}.vcf
+            #end for
+            --consensusDeterminationModel       ${analysis_type.consensusDeterminationModel}
+            --LODThresholdForCleaning           ${analysis_type.LODThresholdForCleaning}
+        #end if
+
+        #if $analysis_type.advanced_parameters.advanced_parameters_enabled
+            --entropyThreshold          ${analysis_type.advanced_parameters.entropyThreshold}
+            --maxConsensuses            ${analysis_type.advanced_parameters.maxConsensuses}
+            --maxIsizeForMovement       ${analysis_type.advanced_parameters.maxIsizeForMovement}
+            --maxPositionalMoveAllowed  ${analysis_type.advanced_parameters.maxPositionalMoveAllowed}
+            --maxReadsForConsensuses    ${analysis_type.advanced_parameters.maxReadsForConsensuses}
+            --maxReadsForRealignment    ${analysis_type.advanced_parameters.maxReadsForRealignment}
+            --maxReadsInMemory          ${analysis_type.advanced_parameters.maxReadsInMemory}
+            ${analysis_type.advanced_parameters.noOriginalAlignmentTags}
+        #end if
+]]>
+    </template>
+</macros>
