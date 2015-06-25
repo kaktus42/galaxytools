@@ -3,8 +3,8 @@
   <xml name="requirements">
     <requirements>
       <requirement type="package">gatk</requirement>
-      <requirement type="set_environment">GATK2_PATH</requirement>
-      <requirement type="set_environment">GATK2_SITE_OPTIONS</requirement>
+      <requirement type="set_environment">GATK_PATH</requirement>
+      <requirement type="set_environment">GATK_SITE_OPTIONS</requirement>
       <yield />
     </requirements>
   </xml>
@@ -12,9 +12,9 @@
     <version_command>@GATK_EXEC@ --help|grep '^The Genome'</version_command>
   </xml>
   <token name="@VERSION@">3.4-0</token>
-  <!--token name="@OUTPUT_NAME_PREFIX@">${tool.name} - ${analysis_type.analysis_type_selector}</token-->
+  <token name="@OUTPUT_NAME_PREFIX@">${tool.name} - ${analysis_type.analysis_type_selector}</token>
   <token name="@GATK_EXEC@">
-    java -jar "\$GATK2_PATH/GenomeAnalysisTK.jar"
+    java -jar "\$GATK_PATH/GenomeAnalysisTK.jar"
   </token>
   <token name="@THREADS@">
     --num_threads \${GALAXY_SLOTS:-4}
@@ -26,6 +26,7 @@
       <when value="true">
         <yield />
       </when>
+      <when value="false" />
     </conditional>
   </xml>
 
@@ -35,6 +36,7 @@
       <when value="true">
         <yield />
       </when>
+      <when value="false" />
     </conditional>
   </xml>
 

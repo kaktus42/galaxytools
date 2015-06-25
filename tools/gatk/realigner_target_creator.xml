@@ -10,6 +10,7 @@
                 <param name="input_rod" type="data" format="vcf" label="Variant file (VCF format)" />
             </repeat>
         </expand>
+        
     </xml>
 
     <xml name="RealignerTargetCreatorOutput">
