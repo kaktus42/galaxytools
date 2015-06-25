@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="samtools" version="0.1.19">
+        <repository changeset_revision="96aab723499f" name="package_samtools_0_1_19" owner="iuc" prior_installation_required="True" toolshed="http://toolshed.g2.bx.psu.edu" />
+    </package>
+    <package name="sparsehash" version="2.0.2">
+        <repository changeset_revision="2cc9627ae29c" name="package_sparsehash_2_0_2" owner="iuc" prior_installation_required="True" toolshed="http://toolshed.g2.bx.psu.edu" />
+    </package>
+    <package name="stacks" version="1.32">
+        <install version="1.0">
+            <actions>
+                <!-- first action is always downloading -->
+                <action type="download_by_url">http://catchenlab.life.illinois.edu/stacks/source/stacks-1.32.tar.gz</action>
+
+                <!-- populate the environment variables from the dependend repos -->
+                <action type="set_environment_for_install">
+                    <repository changeset_revision="96aab723499f" name="package_samtools_0_1_19" owner="iuc" toolshed="http://toolshed.g2.bx.psu.edu">
+                        <package name="samtools" version="0.1.19" />
+                    </repository>
+                    <repository changeset_revision="2cc9627ae29c" name="package_sparsehash_2_0_2" owner="iuc" toolshed="http://toolshed.g2.bx.psu.edu">
+                        <package name="sparsehash" version="2.0.2" />
+                    </repository>
+                </action>
+
+                <action type="autoconf">--enable-sparsehash --enable-bam --with-bam-include-path=${BAM_ROOT}/include --with-bam-lib-path=${BAM_LIB_PATH}</action>
+
+                <action type="set_environment">
+                    <environment_variable action="prepend_to" name="PATH">$INSTALL_DIR/bin</environment_variable>
+                </action>
+            </actions>
+        </install>
+    </package>
+</tool_dependency>
