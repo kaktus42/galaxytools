@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="stacks" version="1.32">
+        <repository changeset_revision="1e53d7d44ed6" name="package_stacks_1_32" owner="avowinkel" toolshed="https://toolshed.g2.bx.psu.edu" />
+    </package>
+</tool_dependency>

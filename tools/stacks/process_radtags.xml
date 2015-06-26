@@ -1,0 +1,252 @@
+<?xml version="1.0"?>
+<tool id="process_radtags" name="process_radtags" version="0.1.0">
+
+    <description>from Stacks toolbox</description>
+
+    <macros>
+        <import>process_radtags_macros.xml</import>
+    </macros>
+
+    <requirements>
+        <requirement type="package" version="1.32">stacks</requirement>
+    </requirements>
+
+    <command>
+    <![CDATA[
+
+    mkdir output &&
+
+    process_radtags
+    
+    #if $analysis_type.analysis_type_select == 'se'
+        -f ${analysis_type.fastq_input1}
+    #elif $analysis_type.analysis_type_select == 'pe'
+        -1 ${analysis_type.fastq_input1}
+        -2 ${analysis_type.fastq_input2}
+    #end if
+
+    -b ${barcode_file}
+    -o output
+
+    #if $analysis_type.fastq_input1.is_of_type('fastqsanger')
+        -E "phred33"
+    #elif $analysis_type.fastq_input1.is_of_type('fastqillumina')
+        -E "phred64"
+    #end if
+
+    #if $double_digest.double_digest_enabled
+        --renz_1 ${enzyme}
+        --renz_2 ${double_digest.enzyme}
+    #else
+        -e ${enzyme}
+    #end if
+    
+    ${c} ${q} ${r}
+
+    #if $t > 0
+        -t ${t}
+    #end if
+    -w ${w}
+    -s ${s}
+
+    -D
+
+    #if $analysis_type.adapter_options.adapter_options_enabled
+        #if $analysis_type.analysis_type_select == 'se'
+            --adapter_1 ${$analysis_type.adapter_options.adapter_1}
+        #elif $analysis_type.analysis_type_select == 'pe'
+            --adapter_1 ${$analysis_type.adapter_options.adapter_1}
+            --adapter_2 ${$analysis_type.adapter_options.adapter_2}
+        #end if
+        --adapter_mm ${$analysis_type.adapter_options.adapter_mm}
+    #end if
+
+    #if $advanced_options.advanced_options_enabled
+        ${advanced_options.filter_illumina}
+        ${advanced_options.disable_rad_check}
+        --barcode_dist_1 ${advanced_options.barcode_dist}
+    #end if
+
+    > ${log_file} 2>&1 &&
+
+    bash $__tool_directory__/process_radtags_rename.sh ${analysis_type.fastq_input1.ext}
+
+    ]]>
+    </command>
+
+    <inputs>
+        <conditional name="analysis_type">
+            <param name="analysis_type_select" type="select" label="Analysis type">
+                <option value="se" selected="true">Single End Reads</option>
+                <option value="pe">Paired End Reads (NOT IMPLEMENTED)</option>
+            </param>
+
+            <when value="se">
+                <param name="fastq_input1" type="data" format="fasta,fastqsanger,fastqillumina" label="Select the fastq/a file" help="Specify fastq/a file with reads"/>
+                
+                <param name="barcode_type" type="select" label="Barcode type">
+                    <option value="--inline_null">inline barcode</option>
+                    <option value="--index_null">barcode in header</option>
+                </param>
+
+                <expand macro="macro_adapter_options_se"/>
+            </when>
+
+            <when value="pe">
+                <param name="fastq_input1" type="data" format="fasta,fastqsanger,fastqillumina" label="Select first fastq/a file" help="Specify fastq/a file with forward reads"/>
+                <param name="fastq_input2" type="data" format="fasta,fastqsanger,fastqillumina" label="Select second fastq/a file" help="Specify fastq/a file with reverse reads"/>
+
+                <param name="barcode_type" type="select" label="Barcode type">
+                    <option value="--inline_inline">inline barcode</option>
+                    <option value="--index_index">barcode in header</option>
+                    <option value="--inline_index">forward read: inline; reverse read: header</option>
+                    <option value="--index_inline">forward read: header; reverse read: inline</option>
+                </param>
+
+                <expand macro="macro_adapter_options_pe"/>
+            </when>
+        </conditional>
+        
+        <param name="barcode_file" type="data" format="tabular" label="Select the barcode file" />
+
+        <expand macro="macro_enzyme_selector"/>
+
+        <conditional name="double_digest">
+            <param name="double_digest_enabled" type="boolean" label="Double Digest was used?" />
+            <when value="true">
+                <expand macro="macro_enzyme_selector2"/>
+            </when>
+            <when value="false" />
+        </conditional>
+
+        <param name="c" type="boolean" truevalue="-c" falsevalue="" label="clean data, remove any read with an uncalled base" help="-c" />
+        <param name="q" type="boolean" truevalue="-q" falsevalue="" label="discard reads with low quality scores" help="-q" />
+        <param name="r" type="boolean" truevalue="-r" falsevalue="" label="rescue barcodes and RAD-Tags" help="-r" />
+        <param name="t" type="integer" value="0" size="4" label="truncate final read length to this value" help="0 = don't truncate; -t &amp;lt;len&amp;gt;" />
+        <param name="w" type="float" value="0.15" label="set the size of the sliding window" help="... as a fraction of the read length, between 0 and 1 (default 0.15); -w &amp;lt;size&amp;gt;">
+            <validator type="expression" message="Window size is a fraction between 0 and 1."><![CDATA[value > 0 and value < 1]]></validator>
+        </param>
+        <param name="s" type="integer" value="10" label="set the score limit" help="If the average score within the sliding window drops below this value, the read is discarded (default 10); -s &amp;lt;lim&amp;gt;">
+            <validator type="expression" message="Score limit must be between 0 and 40."><![CDATA[value >= 0 and value <= 40]]></validator>
+        </param>
+
+        <conditional name="advanced_options">
+            <param name="advanced_options_enabled" type="boolean" label="Specify advanced options?" />
+            <when value="true">
+                <param name="filter_illumina" type="boolean" truevalue="--filter_illumina" falsevalue="" label="discard reads that have been marked by Illumina’s chastity/purity filter as failing" />
+                <param name="disable_rad_check" type="boolean" truevalue="--disable_rad_check" falsevalue="" label="disable checking if the RAD site is intact" />
+                <param name="barcode_dist" type="integer" value="2" size="1" label="distance between barcodes to allow for barcode rescue (default 2)" />
+            </when>
+            <when value="false" />
+        </conditional>
+
+    </inputs>
+
+    <outputs>
+        <collection name="split_output" type="list" label="@OUTPUT_NAME_PREFIX@ on ${on_string} (Fastq Collection)">
+            <discover_datasets pattern="sample_(?P&lt;designation&gt;.+)\.(?P&lt;ext&gt;.+)" directory="splits" />
+        </collection>
+        <data format="txt" name="log_file" label="@OUTPUT_NAME_PREFIX@ on ${on_string} (log)">
+            <discover_datasets pattern="(?P&lt;designation&gt;.+)\.log" ext="txt" directory="output" visible="true" />
+            <discover_datasets pattern="(?P&lt;designation&gt;.+)\.(?P&lt;ext&gt;.+)\.discards" directory="output" visible="true" />
+        </data>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="analysis_type_select" value="se" />
+            <param name="fastq_input1" value="input-se-inline.fastqsanger" />
+            <param name="barcode_type" value="--inline_null" />
+            <param name="adapter_options_enabled" value="false" />
+            <param name="barcode_file" value="barcodes.tbl" />
+            <param name="enzyme" value="ecoT22I" />
+            <param name="double_digest_enabled" value="false" />
+            <output name="log_file">
+                <assert_contents>
+                    <has_line line="Processing single-end data." />
+                    <has_line line="Using Phred+33 encoding for quality scores." />
+                    <has_line line="Found 1 input file(s)." />
+                    <has_line line="Searching for single-end, inlined barcodes." />
+                    <has_line line="Loaded 9 barcodes (6-10bp)." />
+                    <not_has_text text="Will attempt to recover barcodes" />
+                    <has_line line="  11 total reads; -4 ambiguous barcodes; -0 ambiguous RAD-Tags; +0 recovered; -0 low quality reads; 7 retained reads." />
+                </assert_contents>
+                <discovered_dataset designation="Report">
+                    <assert_contents>
+                        <has_line_matching expression="process_radtags version 1.32 executed \d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}" />
+                        <has_line_matching expression="dataset_1.dat	7	0	4	0	11" />
+                    </assert_contents>
+                </discovered_dataset>
+            </output>
+        </test>
+
+    </tests>
+
+    <help>
+<![CDATA[
+
+**Tool website (with examples)**:
+
+http://catchenlab.life.illinois.edu/stacks/comp/process_radtags.php
+
+----
+
+**Tool help output**::
+
+    process_radtags 1.32
+    process_radtags [-f in_file | -p in_dir [-P] [-I] | -1 pair_1 -2 pair_2] -b barcode_file -o out_dir -e enz [-c] [-q] [-r] [-t len] [-D] [-w size] [-s lim] [-h]
+    f: path to the input file if processing single-end sequences.
+    i: input file type, either 'bustard' for the Illumina BUSTARD format, 'bam', 'fastq' (default), or 'gzfastq' for gzipped FASTQ.
+    y: output type, either 'fastq', 'gzfastq', 'fasta', or 'gzfasta' (default is to match the input file type).
+    p: path to a directory of files.
+    P: files contained within directory specified by '-p' are paired.
+    I: specify that the paired-end reads are interleaved in single files.
+    1: first input file in a set of paired-end sequences.
+    2: second input file in a set of paired-end sequences.
+    o: path to output the processed files.
+    b: path to a file containing barcodes for this run.
+    c: clean data, remove any read with an uncalled base.
+    q: discard reads with low quality scores.
+    r: rescue barcodes and RAD-Tags.
+    t: truncate final read length to this value.
+    E: specify how quality scores are encoded, 'phred33' (Illumina 1.8+, Sanger, default) or 'phred64' (Illumina 1.3 - 1.5).
+    D: capture discarded reads to a file.
+    w: set the size of the sliding window as a fraction of the read length, between 0 and 1 (default 0.15).
+    s: set the score limit. If the average score within the sliding window drops below this value, the read is discarded (default 10).
+    h: display this help messsage.
+
+    Barcode options:
+    --inline_null:   barcode is inline with sequence, occurs only on single-end read (default).
+    --index_null:    barcode is provded in FASTQ header, occurs only on single-end read.
+    --inline_inline: barcode is inline with sequence, occurs on single and paired-end read.
+    --index_index:   barcode is provded in FASTQ header, occurs on single and paired-end read.
+    --inline_index:  barcode is inline with sequence on single-end read, occurs in FASTQ header for paired-end read.
+    --index_inline:  barcode occurs in FASTQ header for single-end read, is inline with sequence on paired-end read.
+
+    Restriction enzyme options:
+    -e <enz>, --renz_1 <enz>: provide the restriction enzyme used (cut site occurs on single-end read)
+    --renz_2 <enz>: if a double digest was used, provide the second restriction enzyme used (cut site occurs on the paired-end read).
+    Currently supported enzymes include:
+      'aluI', 'apeKI', 'apoI', 'bamHI', 'bgIII', 'bstYI', 'claI', 'ddeI', 
+      'dpnII', 'eaeI', 'ecoRI', 'ecoRV', 'ecoT22I', 'hindIII', 'kpnI', 'mluCI', 
+      'mseI', 'mspI', 'ndeI', 'nheI', 'nlaIII', 'notI', 'nsiI', 'pstI', 
+      'rsaI', 'sacI', 'sau3AI', 'sbfI', 'sexAI', 'sgrAI', 'speI', 'sphI', 
+      'taqI', 'xbaI', or 'xhoI'
+    Adapter options:
+    --adapter_1 <sequence>: provide adaptor sequence that may occur on the single-end read for filtering.
+    --adapter_2 <sequence>: provide adaptor sequence that may occur on the paired-read for filtering.
+      --adapter_mm <mismatches>: number of mismatches allowed in the adapter sequence.
+
+    Output options:
+    --merge: if no barcodes are specified, merge all input files into a single output file.
+
+    Advanced options:
+    --filter_illumina: discard reads that have been marked by Illumina's chastity/purity filter as failing.
+    --disable_rad_check: disable checking if the RAD site is intact.
+    --len_limit &lt;limit&gt;: specify a minimum sequence length (useful if your data has already been trimmed).
+    --barcode_dist_1: the number of allowed mismatches when rescuing single-end barcodes (default 1).
+    --barcode_dist_2: the number of allowed mismatches when rescuing paired-end barcodes (defaults to --barcode_dist_1).
+
+]]>
+    </help>
+</tool>

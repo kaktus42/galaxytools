@@ -1,0 +1,108 @@
+<macros>
+    
+    <token name="@OUTPUT_NAME_PREFIX@">${tool.name}</token>
+
+    <xml name="macro_enzyme_selector">
+        <param name="enzyme" type="select" label="Select Enzyme">
+            <option value="aluI">aluI</option>
+            <option value="apeKI">apeKI</option>
+            <option value="apoI">apoI</option>
+            <option value="bamHI">bamHI</option>
+            <option value="bgIII">bgIII</option>
+            <option value="bstYI">bstYI</option>
+            <option value="claI">claI</option>
+            <option value="ddeI">ddeI</option>
+            <option value="dpnII">dpnII</option>
+            <option value="eaeI">eaeI</option>
+            <option value="ecoRI">ecoRI</option>
+            <option value="ecoRV">ecoRV</option>
+            <option value="ecoT22I">ecoT22I</option>
+            <option value="hindIII">hindIII</option>
+            <option value="kpnI">kpnI</option>
+            <option value="mluCI">mluCI</option>
+            <option value="mseI">mseI</option>
+            <option value="mspI">mspI</option>
+            <option value="ndeI">ndeI</option>
+            <option value="nheI">nheI</option>
+            <option value="nlaIII">nlaIII</option>
+            <option value="notI">notI</option>
+            <option value="nsiI">nsiI</option>
+            <option value="pstI">pstI</option>
+            <option value="rsaI">rsaI</option>
+            <option value="sacI">sacI</option>
+            <option value="sau3AI">sau3AI</option>
+            <option value="sbfI">sbfI</option>
+            <option value="sexAI">sexAI</option>
+            <option value="sgrAI">sgrAI</option>
+            <option value="speI">speI</option>
+            <option value="sphI">sphI</option>
+            <option value="taqI">taqI</option>
+            <option value="xbaI">xbaI</option>
+            <option value="xhoI">xhoI</option>
+        </param>
+    </xml>
+
+    <xml name="macro_enzyme_selector2">
+        <param name="enzyme2" type="select" label="Select Second Enzyme (on reverse end only)">
+            <option value="aluI">aluI</option>
+            <option value="apeKI">apeKI</option>
+            <option value="apoI">apoI</option>
+            <option value="bamHI">bamHI</option>
+            <option value="bgIII">bgIII</option>
+            <option value="bstYI">bstYI</option>
+            <option value="claI">claI</option>
+            <option value="ddeI">ddeI</option>
+            <option value="dpnII">dpnII</option>
+            <option value="eaeI">eaeI</option>
+            <option value="ecoRI">ecoRI</option>
+            <option value="ecoRV">ecoRV</option>
+            <option value="ecoT22I">ecoT22I</option>
+            <option value="hindIII">hindIII</option>
+            <option value="kpnI">kpnI</option>
+            <option value="mluCI">mluCI</option>
+            <option value="mseI">mseI</option>
+            <option value="mspI">mspI</option>
+            <option value="ndeI">ndeI</option>
+            <option value="nheI">nheI</option>
+            <option value="nlaIII">nlaIII</option>
+            <option value="notI">notI</option>
+            <option value="nsiI">nsiI</option>
+            <option value="pstI">pstI</option>
+            <option value="rsaI">rsaI</option>
+            <option value="sacI">sacI</option>
+            <option value="sau3AI">sau3AI</option>
+            <option value="sbfI">sbfI</option>
+            <option value="sexAI">sexAI</option>
+            <option value="sgrAI">sgrAI</option>
+            <option value="speI">speI</option>
+            <option value="sphI">sphI</option>
+            <option value="taqI">taqI</option>
+            <option value="xbaI">xbaI</option>
+            <option value="xhoI">xhoI</option>
+        </param>
+    </xml>
+
+    <xml name="macro_adapter_options_se">
+        <expand macro="macro_adapter_options">
+            <param name="adapter_1" type="text" label="provide adaptor sequence that may occur on the read for filtering" />
+        </expand>
+    </xml>
+
+    <xml name="macro_adapter_options_pe">
+        <expand macro="macro_adapter_options">
+            <param name="adapter_1" type="text" label="provide adaptor sequence that may occur on the single-end read for filtering" />
+            <param name="adapter_2" type="text" label="provide adaptor sequence that may occur on the paired-read for filtering" />
+        </expand>
+    </xml>
+
+    <xml name="macro_adapter_options">
+        <conditional name="adapter_options">
+            <param name="adapter_options_enabled" type="boolean" label="Specify adapter options?" />
+            <when value="true">
+                <yield />
+                <param name="adapter_mm" type="integer" value="1" size="2" label="number of mismatches allowed in the adapter sequence" />
+            </when>
+            <when value="false" />
+        </conditional>
+    </xml>
+</macros>
