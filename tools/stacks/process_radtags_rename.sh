@@ -2,8 +2,7 @@
 
 EXT=$1
 
-mv output/process_radtags.log output/Report.log
-mv output/*.discards output/Discards.${EXT}.discards
+mv output/*.discards output/discards.discards
 mkdir splits
 mv output/sample_* splits
 #ls -lah output splits

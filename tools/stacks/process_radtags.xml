@@ -146,10 +146,9 @@
         <collection name="split_output" type="list" label="@OUTPUT_NAME_PREFIX@ on ${on_string} (Fastq Collection)">
             <discover_datasets pattern="sample_(?P&lt;designation&gt;.+)\.(?P&lt;ext&gt;.+)" directory="splits" />
         </collection>
-        <data format="txt" name="log_file" label="@OUTPUT_NAME_PREFIX@ on ${on_string} (log)">
-            <discover_datasets pattern="(?P&lt;designation&gt;.+)\.log" ext="txt" directory="output" visible="true" />
-            <discover_datasets pattern="(?P&lt;designation&gt;.+)\.(?P&lt;ext&gt;.+)\.discards" directory="output" visible="true" />
-        </data>
+        <data format="txt" name="log_file" label="@OUTPUT_NAME_PREFIX@ on ${on_string} (log)" />
+        <data format="txt" name="report" label="@OUTPUT_NAME_PREFIX@ on ${on_string} (Report)" from_work_dir="output/process_radtags.log" />
+        <data format_source="fastq_input1" name="discards" label="@OUTPUT_NAME_PREFIX@ on ${on_string} (Discards)" from_work_dir="output/discards.discards" />
     </outputs>
 
     <tests>
