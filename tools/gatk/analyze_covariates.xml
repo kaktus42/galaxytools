@@ -1,0 +1,35 @@
+<macros>
+    <xml name="AnalyzeCovariatesParameters">
+
+        <!-- BQSR in main config -->
+
+        <param name="afterReportFile" type="data" format="table" optional="true" label="file containing the BQSR second-pass report file" help="-after,&#8209;&#8209;afterReportFile &amp;lt;afterReportFile&amp;gt;" />
+        <param name="beforeReportFile" type="data" format="table" optional="true" label="file containing the BQSR first-pass report file" help="-before,&#8209;&#8209;beforeReportFile &amp;lt;beforeReportFile&amp;gt;" />
+
+    </xml>
+
+    <xml name="AnalyzeCovariatesOutput">
+        <data format="pdf" name="ac_plotsReportFile" label="${tool.name} - ${analysis_type.analysis_type_selector} on ${on_string} (PDF Recalibration Report)">
+            <yield />
+        </data>
+    </xml>
+
+    <template name="AnalyzeCovariatesPreprocessing">
+<![CDATA[]]>
+    </template>
+
+    <template name="AnalyzeCovariatesOptions">
+<![CDATA[
+        --plotsReportFile                   ${ac_plotsReportFile}
+
+        #if str($analysis_type.afterReportFile)
+            --afterReportFile $analysis_type.afterReportFile)
+        #end if
+        #if str($analysis_type.beforeReportFile)
+            --beforeReportFile $analysis_type.beforeReportFile)
+        #end if
+]]>
+    </template>
+</macros>
+
+

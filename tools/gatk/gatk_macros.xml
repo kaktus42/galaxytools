@@ -9,15 +9,19 @@
     </requirements>
   </xml>
   <xml name="version_command">
-    <version_command>@GATK_EXEC@ --help|grep '^The Genome'</version_command>
+    <version_command><![CDATA[ @GATK_EXEC@ --help|grep '^The Genome' ]]></version_command>
   </xml>
   <token name="@VERSION@">3.4-0</token>
   <token name="@OUTPUT_NAME_PREFIX@">${tool.name} - ${analysis_type.analysis_type_selector}</token>
   <token name="@GATK_EXEC@">
-    java -jar "\$GATK_PATH/GenomeAnalysisTK.jar"
+<![CDATA[
+    java -Xmx4G -jar "\$GATK_PATH/GenomeAnalysisTK.jar"
+]]>
   </token>
   <token name="@THREADS@">
+<![CDATA[
     --num_threads \${GALAXY_SLOTS:-4}
+]]>
   </token>
 
   <xml name="macro_optional_parameters">

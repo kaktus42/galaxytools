@@ -1,0 +1,12 @@
+name: gatk
+owner: avowinkel
+description: The Genome Analysis Toolkit in Version 3
+homepage_url: https://www.broadinstitute.org/gatk/
+long_description: |
+    The Genome Analysis Toolkit or GATK is a software package developed at the Broad Institute to analyze high-throughput sequencing data. The toolkit offers a wide variety of tools, with a primary focus on variant discovery and genotyping as well as strong emphasis on data quality assurance. Its robust architecture, powerful processing engine and high-performance computing features make it capable of taking on projects of any size. https://www.broadinstitute.org/gatk/about/
+    Repository-Maintainer: Alexander Vowinkel
+    Repository-Development: https://github.com/kaktus42/galaxytools
+remote_repository_url: https://github.com/kaktus42/galaxytools/tree/master/tools/gatk
+type: unrestricted
+categories:
+- Sequence Analysis

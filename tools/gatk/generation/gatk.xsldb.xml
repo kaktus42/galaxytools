@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<analysis>
-	<name>RealignerTargetCreator</name>
-	<name>IndelRealigner</name>
-</analysis>
+<analyses>
+    <analysis>
+	    <name>RealignerTargetCreator</name>
+	    <macro_file>realigner_target_creator.xml</macro_file>
+    </analysis>
+    <analysis>
+	    <name>IndelRealigner</name>
+	    <macro_file>indel_realigner.xml</macro_file>
+    </analysis>
+    <analysis>
+	    <name>BaseRecalibrator</name>
+	    <macro_file>base_recalibrator.xml</macro_file>
+    </analysis>
+    <analysis>
+	    <name>AnalyzeCovariates</name>
+	    <macro_file>analyze_covariates.xml</macro_file>
+    </analysis>
+    <analysis>
+	    <name>PrintReads</name>
+	    <macro_file>print_reads.xml</macro_file>
+    </analysis>
+    <analysis>
+	    <name>HaplotypeCaller</name>
+	    <macro_file>haplotype_caller.xml</macro_file>
+    </analysis>
+</analyses>

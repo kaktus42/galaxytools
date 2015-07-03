@@ -1,0 +1,29 @@
+<macros>
+    <xml name="BaseRecalibratorParameters">
+
+        <param name="knownSites" type="data" format="vcf,bcf,bed,pileup,tabular,table" label="Database of known Sites (ROD files; e.g. VCF format)" multiple="true" title="A database of known polymorphic sites to skip over in the recalibration algorithm" help="-knownSites,&#8209;&#8209;knownSites &amp;lt;knownSites&amp;gt;" />
+
+    </xml>
+
+    <xml name="BaseRecalibratorOutput">
+        <data format="table" name="br_table" label="${tool.name} - ${analysis_type.analysis_type_selector} on ${on_string} (Table)">
+            <yield />
+        </data>
+    </xml>
+
+    <template name="BaseRecalibratorPreprocessing">
+<![CDATA[]]>
+    </template>
+
+    <template name="BaseRecalibratorOptions">
+<![CDATA[
+        --out                   ${br_table}
+
+        #for $knownSite in $analysis_type.optional_parameters.knownSites:
+            --knownSites ${knownSite}
+        #end for
+]]>
+    </template>
+</macros>
+
+

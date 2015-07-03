@@ -1,0 +1,65 @@
+<macros>
+    <xml name="PrintReadsParameters">
+
+        <!-- BQSR in main config -->
+
+        <expand macro="macro_optional_parameters">
+
+            <param name="number" type="integer" value="" optional="true" label="Print the first n reads from the file, discarding the rest" help="-n,&#8209;&#8209;number &amp;lt;number&amp;gt;" />
+
+            <param name="platform" type="text" value="" optional="true" label="Exclude all reads with this platform from the output" help="-platform,&#8209;&#8209;platform &amp;lt;platform&amp;gt;" />
+
+            <param name="readGroup" type="text" value="" optional="true" label="Exclude all reads with this read group from the output" help="-readGroup,&#8209;&#8209;readGroup &amp;lt;readGroup&amp;gt;" />
+
+            <param name="sample_file" type="data" format="txt" optional="true" label="File containing a list of samples (one per line). Can be specified multiple times" help="-sf,&#8209;&#8209;sample_file &amp;lt;sample_file&amp;gt;" />
+
+            <repeat name="sample_names" title="Sample names to be included in the analysis" help="-sn,‑‑sample_name &amp;lt;sample_name&amp;gt;">
+                <param name="sample_name" type="text" value="" title="Sample name to be included in the analysis" />
+            </repeat>
+            
+            <param name="simplify" type="text" truevalue="-s" falsevalue="" label="Erase all extra attributes in the read but keep the read group information" help="-s,&#8209;&#8209;simplify" />
+
+        </expand>
+
+    </xml>
+
+    <xml name="PrintReadsOutput">
+        <data format="bam" name="pr_output_bam" label="${tool.name} - ${analysis_type.analysis_type_selector} on ${on_string} (BAM)">
+            <yield />
+        </data>
+    </xml>
+
+    <template name="PrintReadsPreprocessing">
+<![CDATA[]]>
+    </template>
+
+    <template name="PrintReadsOptions">
+<![CDATA[
+        --out                   ${pr_output_bam}
+
+        #set $optionals = $analysis_type.optional_parameters
+        #if $optionals.optional_parameters_enabled
+            #if int($optionals.number) > 0
+                --number $optionals.number
+            #end if
+            #if str($optionals.platform)
+                --platform $optionals.platform
+            #end if
+            #if str($optionals.readGroup)
+                --readGroup $optionals.readGroup
+            #end if
+            #if $optionals.sample_file
+                --sample_file $optionals.sample_file
+            #end if
+            #if $optionals.sample_names
+                #for $sample in $optionals.sample_names:
+                    --intervals ${sample.sample_name}
+                #end for
+            #end if
+            $optionals.simplify
+        #end if
+]]>
+    </template>
+</macros>
+
+

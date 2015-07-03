@@ -1,0 +1,59 @@
+<macros>
+    <xml name="HaplotypeCallerParameters">
+
+        <conditional name="cond_usage">
+            <param name="cond_usage_selector" type="select" label="Select usage">
+                <option value="GVCF">Single-sample all-sites calling on DNAseq (GVCF mode)</option>
+            </param>
+            <when value="GVCF">
+                <expand macro="HaplotypeCallerGVCF" />
+            </when>
+        </conditional>
+
+        <expand macro="macro_optional_parameters">
+
+            <param name="sample_ploidy" type="integer" value="2" label="Ploidy (number of chromosomes) per sample. For pooled data, set to (Number of samples in each pool * Sample Ploidy)" help="-ploidy,&#8209;&#8209;sample_ploidy &amp;lt;sample_ploidy&amp;gt;" />
+
+        </expand>
+
+    </xml>
+
+    <xml name="HaplotypeCallerOutput">
+        <data format="vcf" name="hc_output_gvcf" from_work_dir="output.g.vcf" label="${tool.name} on ${on_string} (gVCF)">
+            <yield />
+        </data>
+    </xml>
+
+    <template name="HaplotypeCallerPreprocessing">
+<![CDATA[]]>
+    </template>
+
+    <template name="HaplotypeCallerOptions">
+<![CDATA[
+        --out output.g.vcf
+
+        #set $optionals = $analysis_type.optional_parameters
+        #if $optionals.optional_parameters_enabled
+            --sample_ploidy $optionals.sample_ploidy
+        #end if
+
+        #set $usage_selector = $analysis_type.cond_usage.cond_usage_selector
+        #set $usage = $analysis_type.cond_usage
+
+        #if $usage_selector == 'GVCF'
+            --emitRefConfidence "GVCF"
+        #end if
+]]>
+    </template>
+
+
+
+    <xml name="HaplotypeCallerGVCF">
+        <param name="emitRefConfidence" type="select" optional="true" label="Mode for emitting reference confidence scores" help="-ERC,‑‑emitRefConfidence &amp;lt;emitRefConfidence&amp;gt;">
+              <option value="GVCF">GVCF (Reference model emitted with condensed non-variant blocks)</option>
+        </param>
+    </xml>
+
+</macros>
+
+
