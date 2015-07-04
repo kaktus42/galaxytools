@@ -1,5 +1,7 @@
 <macros>
-    <xml name="HaplotypeCallerParameters">
+    <xml name="HaplotypeCallerParameters" tokens="tag">
+        
+        <expand macro="macro_bam_input" tag="@TAG@" />
 
         <conditional name="cond_usage">
             <param name="cond_usage_selector" type="select" label="Select usage">
@@ -25,12 +27,16 @@
     </xml>
 
     <template name="HaplotypeCallerPreprocessing">
-<![CDATA[]]>
+<![CDATA[
+        @token_bam_input_pre@
+]]>
     </template>
 
     <template name="HaplotypeCallerOptions">
 <![CDATA[
         --out output.g.vcf
+
+        @token_bam_input@
 
         #set $optionals = $analysis_type.optional_parameters
         #if $optionals.optional_parameters_enabled

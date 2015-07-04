@@ -1,5 +1,7 @@
 <macros>
-    <xml name="IndelRealignerParameters">
+    <xml name="IndelRealignerParameters" tokens="tag">
+        
+        <expand macro="macro_bam_input" tag="@TAG@" />
 
         <param name="targetIntervals" type="data" format="gatk_interval" label="Intervals file output from RealignerTargetCreator" help="-targetIntervals,--targetIntervals &amp;lt;targetIntervals&amp;gt;" />
 
@@ -46,6 +48,8 @@
 
     <template name="IndelRealignerPreprocessing">
 <![CDATA[
+        @token_bam_input_pre@
+
         ln -s -f ${analysis_type.targetIntervals} target.intervals &&
 
         #if $analysis_type.optional_parameters.optional_parameters_enabled
@@ -60,6 +64,7 @@
 <![CDATA[
         --out                   ${ir_output_bam}
 
+        @token_bam_input@
         --targetIntervals       target.intervals
 
         #if $analysis_type.optional_parameters.optional_parameters_enabled

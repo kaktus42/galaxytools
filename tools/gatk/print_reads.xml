@@ -1,5 +1,7 @@
 <macros>
-    <xml name="PrintReadsParameters">
+    <xml name="PrintReadsParameters" tokens="tag">
+        
+        <expand macro="macro_bam_input" tag="@TAG@" />
 
         <!-- BQSR in main config -->
 
@@ -30,12 +32,16 @@
     </xml>
 
     <template name="PrintReadsPreprocessing">
-<![CDATA[]]>
+<![CDATA[
+        @token_bam_input_pre@
+]]>
     </template>
 
     <template name="PrintReadsOptions">
 <![CDATA[
         --out                   ${pr_output_bam}
+
+        @token_bam_input@
 
         #set $optionals = $analysis_type.optional_parameters
         #if $optionals.optional_parameters_enabled

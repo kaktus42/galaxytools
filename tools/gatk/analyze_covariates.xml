@@ -1,5 +1,7 @@
 <macros>
-    <xml name="AnalyzeCovariatesParameters">
+    <xml name="AnalyzeCovariatesParameters" tokens="tag">
+        
+        <expand macro="macro_bam_input" tag="@TAG@" />
 
         <!-- BQSR in main config -->
 
@@ -15,12 +17,16 @@
     </xml>
 
     <template name="AnalyzeCovariatesPreprocessing">
-<![CDATA[]]>
+<![CDATA[
+        @token_bam_input_pre@
+]]>
     </template>
 
     <template name="AnalyzeCovariatesOptions">
 <![CDATA[
         --plotsReportFile                   ${ac_plotsReportFile}
+
+        @token_bam_input@
 
         #if str($analysis_type.afterReportFile)
             --afterReportFile $analysis_type.afterReportFile)

@@ -8,7 +8,7 @@
 
 <xsl:template match="/">
 
-<tool id="gatk" name="GATK" version="@VERSION@.d2">
+<tool id="gatk" name="GATK" version="@VERSION@.d3">
     <description>tool collection Version @VERSION@</description>
 
     <macros>
@@ -18,14 +18,15 @@
         </xsl:for-each>
     </macros>
 
+    <stdio>
+        <regex match="^INFO" level="log" />
+        <regex match="^WARN" level="warning" />
+        <regex match="Using un-vectorized C++ implementation of PairHMM" level="warning" />
+        <exit_code range="1:" level="fatal"/>
+    </stdio>
+
     <command>
 <xsl:text disable-output-escaping="yes">&lt;![CDATA[
-        ############################
-        ## create links to input files with correct extensions
-        ############################
-        ln -s -f ${cond_reference.input_bam} input.bam &amp;&amp;
-        ln -s -f ${cond_reference.input_bam.metadata.bam_index} input.bam.bai &amp;&amp;
-
         ############################
         ## import analysis specific preprocessings by using cheetahs internal searchList
         ## if not defined, ignore
@@ -41,9 +42,8 @@
         @GATK_EXEC@
         
         --analysis_type ${analysis_type.analysis_type_selector}
+        --reference_sequence    ${ref_file.fields.path}
 
-        --input_file            input.bam
-        --reference_sequence    ${cond_reference.ref_file.fields.path}
         --log_to_file           ${output_log}
 
         #if $cond_intervals.cond_intervals_enabled
@@ -77,32 +77,12 @@
 
     <inputs>
 
-        <conditional name="cond_reference">
-            <param name="cond_reference_selector" type="select" label="Choose the source for the reference list">
-                <option value="cached">Locally cached</option>
-                <!--option value="history">History</option-->
-            </param>
-            <when value="cached">
-                <param name="input_bam" type="data" format="bam" label="Input file containing sequence data (BAM)" help="-I, &#8209;&#8209;input_file">
-                    <validator type="unspecified_build" />
-                    <validator type="dataset_metadata_in_data_table" table_name="picard_indexes" metadata_name="dbkey" metadata_column="dbkey" message="Sequences are not currently available for the specified build." /> 
-                </param>
-                <param name="ref_file" type="select" label="Using reference genome" help="-R,&#8209;&#8209;reference_sequence &amp;lt;reference_sequence&amp;gt;" >
-                    <options from_data_table="picard_indexes">
-                        <filter type="data_meta" key="dbkey" ref="input_bam" column="dbkey"/>
-                    </options>
-                    <validator type="no_options" message="A built-in reference genome is not available for the build associated with the selected input file"/>
-                </param>
-            </when>
-            <!--when value="history">
-                <param name="input_bam" type="data" format="bam" label="BAM file" help="-I,&#8209;&#8209;input_file &amp;lt;input_file&amp;gt;" />
-                <param name="ref_file" type="data" format="fasta" label="Using reference file" help="-R,&#8209;&#8209;reference_sequence &amp;lt;reference_sequence&amp;gt;">
-                <options>
-                    <filter type="data_meta" key="dbkey" ref="input_bam" />
-                </options>
-                </param>
-            </when-->
-        </conditional>
+        <param name="ref_file" type="select" label="Using reference genome" help="-R,&#8209;&#8209;reference_sequence &amp;lt;reference_sequence&amp;gt;" >
+            <options from_data_table="picard_indexes">
+                <!--filter type="data_meta" key="dbkey" ref="@TAG@_input" column="dbkey" /-->
+            </options>
+            <validator type="no_options" message="A built-in reference genome is not available for the build associated with the selected input file"/>
+        </param>
 
         <conditional name="cond_intervals">
             <param name="cond_intervals_enabled" type="boolean" label="Select interval subset to operate on?" />
@@ -130,7 +110,15 @@
             </param>
             <xsl:for-each select="analyses/analysis">
             <when value="{name}">
-                <expand macro="{name}Parameters" />
+                <!--xsl:choose>
+                    <xsl:when test="input_type = 'bam'">
+                        <expand macro="macro_bam_input" tag="{tag}" />
+                    </xsl:when>
+                    <xsl:when test="input_type = 'gvcf'">
+                        <expand macro="macro_gvcf_input" tag="{tag}" />
+                    </xsl:when>
+                </xsl:choose-->
+                <expand macro="{name}Parameters" tag="{tag}" />
             </when>
             </xsl:for-each>
         </conditional>
@@ -138,12 +126,20 @@
 
     <outputs>
         <xsl:for-each select="analyses/analysis">
-        <expand macro="{name}Output">
+        <expand macro="{name}Output" tag="{tag}">
             <filter>analysis_type['analysis_type_selector'] == '<xsl:value-of select="name" />'</filter>
         </expand>
         </xsl:for-each>
         <data format="txt" name="output_log" label="${{tool.name}} - ${{analysis_type.analysis_type_selector}} on ${{on_string}} (log)" />
     </outputs>
+
+    <expand macro="macro_tests" />
+
+    <citations>
+        <citation type="doi">10.1101/gr.107524.110</citation>
+        <citation type="doi">10.1038/ng.806</citation>
+        <citation type="doi">10.1002/0471250953.bi1110s43</citation>
+    </citations>
 </tool>
 
 </xsl:template>

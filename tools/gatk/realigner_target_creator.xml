@@ -1,5 +1,8 @@
 <macros>
-    <xml name="RealignerTargetCreatorParameters">
+    <xml name="RealignerTargetCreatorParameters" tokens="tag">
+        
+        <expand macro="macro_bam_input" tag="@TAG@" />
+
         <expand macro="macro_optional_parameters">
             <param name="maxIntervalSize" type="integer" value="500" label="maximum interval size; any intervals larger than this value will be dropped" help="-maxInterval,&#8209;&#8209;maxIntervalSize &amp;lt;maxIntervalSize&amp;gt;" />
             <param name="minReadsAtLocus" type="integer" value="4" label="minimum reads at a locus to enable using the entropy calculation" help="-minReads,&#8209;&#8209;minReadsAtLocus &amp;lt;minReadsAtLocus&amp;gt;" />
@@ -21,6 +24,8 @@
 
     <template name="RealignerTargetCreatorPreprocessing">
 <![CDATA[
+        @token_bam_input_pre@
+
         #if $analysis_type.optional_parameters.optional_parameters_enabled
             #for $i, $rod_binding in enumerate($analysis_type.optional_parameters.rod_bindings):
                 ln -s -f ${rod_binding.input_rod} rod_binding_${i}.vcf &&
@@ -32,6 +37,8 @@
     <template name="RealignerTargetCreatorOptions">
 <![CDATA[
         --out                   ${rtc_output_intervals}
+
+        @token_bam_input@
 
         #if $analysis_type.optional_parameters.optional_parameters_enabled
             --maxIntervalSize       ${analysis_type.optional_parameters.maxIntervalSize}

@@ -1,47 +1,110 @@
 <macros>
 
-  <xml name="requirements">
-    <requirements>
-      <requirement type="package">gatk</requirement>
-      <requirement type="set_environment">GATK_PATH</requirement>
-      <requirement type="set_environment">GATK_SITE_OPTIONS</requirement>
-      <yield />
-    </requirements>
-  </xml>
-  <xml name="version_command">
-    <version_command><![CDATA[ @GATK_EXEC@ --help|grep '^The Genome' ]]></version_command>
-  </xml>
-  <token name="@VERSION@">3.4-0</token>
-  <token name="@OUTPUT_NAME_PREFIX@">${tool.name} - ${analysis_type.analysis_type_selector}</token>
-  <token name="@GATK_EXEC@">
-<![CDATA[
-    java -Xmx4G -jar "\$GATK_PATH/GenomeAnalysisTK.jar"
-]]>
-  </token>
-  <token name="@THREADS@">
-<![CDATA[
-    --num_threads \${GALAXY_SLOTS:-4}
-]]>
-  </token>
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package">gatk</requirement>
+            <requirement type="set_environment">GATK_PATH</requirement>
+            <requirement type="set_environment">GATK_SITE_OPTIONS</requirement>
+            <yield />
+        </requirements>
+    </xml>
 
-  <xml name="macro_optional_parameters">
-    <conditional name="optional_parameters">
-      <param name="optional_parameters_enabled" type="boolean" label="Configure Optional Parameters" />
-      <when value="true">
-        <yield />
-      </when>
-      <when value="false" />
-    </conditional>
-  </xml>
+    <xml name="version_command">
+        <version_command><![CDATA[ @GATK_EXEC@ --help|grep '^The Genome' ]]></version_command>
+    </xml>
 
-  <xml name="macro_advanced_parameters">
-    <conditional name="advanced_parameters">
-      <param name="advanced_parameters_enabled" type="boolean" label="Configure Advanced Parameters" />
-      <when value="true">
+    <token name="@VERSION@">3.4-0</token>
+    <token name="@OUTPUT_NAME_PREFIX@">${tool.name} - ${analysis_type.analysis_type_selector}</token>
+    <token name="@GATK_EXEC@">
+<![CDATA[
+        java -Xmx4G -jar "\$GATK_PATH/GenomeAnalysisTK.jar"
+]]>
+    </token>
+    <token name="@THREADS@">
+<![CDATA[
+        --num_threads \${GALAXY_SLOTS:-4}
+]]>
+    </token>
+
+    <xml name="macro_gvcf_input" tokens="tag">
+        <param name="input" type="data" format="vcf" multiple="true" label="Variant files (gVCF format)" help="-V, &#8209;&#8209;variant">
+            <validator type="unspecified_build" />
+            <validator type="dataset_metadata_in_data_table" table_name="picard_indexes" metadata_name="dbkey" metadata_column="dbkey" message="Sequences are not currently available for the specified build." /> 
+        </param>
+    </xml>
+    <token name="@token_gvcf_input_pre@" tokens="tag">
+<![CDATA[
+        ############################
+        ## create links to gVCF input files with correct extensions
+        ############################
+        #for $i, $variant in enumerate($analysis_type.input):
+            ln -s -f ${variant} variant_${i}.g.vcf &&
+        #end for
+]]>
+    </token>
+    <token name="@token_gvcf_input@">
+<![CDATA[
+        #for $i, $variant in enumerate($analysis_type.input):
+            --variant variant_${i}.g.vcf
+        #end for
+        @token_reference_input@
+]]>
+    </token>
+
+    <xml name="macro_bam_input">
+        <param name="input" type="data" format="bam" label="Input file containing sequence data (BAM)" help="-I, ‑‑input_file">
+          <validator type="unspecified_build"/>
+          <validator type="dataset_metadata_in_data_table" table_name="picard_indexes" metadata_name="dbkey" metadata_column="dbkey" message="Sequences are not currently available for the specified build."/>
+        </param>
+    </xml>
+    <token name="@token_bam_input_pre@">
+<![CDATA[
+        ############################
+        ## create links to bam input files with correct extensions
+        ############################
+        ln -s -f ${analysis_type.input} input.bam &&
+        ln -s -f ${analysis_type.input.metadata.bam_index} input.bam.bai &&
+]]>
+    </token>
+    <token name="@token_bam_input@">
+<![CDATA[
+        --input_file            input.bam
+        @token_reference_input@
+]]>
+    </token>
+
+    <token name="@token_reference_input@">
+<![CDATA[
+]]>
+    </token>
+    <xml name="macro_input" tokens="tag">
         <yield />
-      </when>
-      <when value="false" />
-    </conditional>
-  </xml>
+    </xml>
+
+    <xml name="macro_optional_parameters">
+        <conditional name="optional_parameters">
+            <param name="optional_parameters_enabled" type="boolean" label="Configure Optional Parameters" />
+            <when value="true">
+                <yield />
+            </when>
+            <when value="false" />
+        </conditional>
+    </xml>
+
+    <xml name="macro_advanced_parameters">
+        <conditional name="advanced_parameters">
+            <param name="advanced_parameters_enabled" type="boolean" label="Configure Advanced Parameters" />
+            <when value="true">
+                <yield />
+            </when>
+            <when value="false" />
+        </conditional>
+    </xml>
+
+    <xml name="macro_tests">
+        <tests>
+            
+        </tests>
+    </xml>
 
 </macros>
