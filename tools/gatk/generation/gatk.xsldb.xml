@@ -42,4 +42,10 @@
 	    <tag>gg</tag>
 	    <macro_file>genotype_gvcfs.xml</macro_file>
     </analysis>
+    <analysis>
+	    <name>CombineGVCFs</name>
+	    <input_type>gvcf</input_type>
+	    <tag>cg</tag>
+	    <macro_file>combine_gvcfs.xml</macro_file>
+    </analysis>
 </analyses>

@@ -1,0 +1,44 @@
+<macros>
+    <xml name="CombineGVCFsParameters" tokens="tag">
+        
+        <expand macro="macro_gvcf_input" tag="@TAG@" />
+
+        <expand macro="macro_optional_parameters">
+
+            <param name="breakBandsAtMultiplesOf" type="integer" value="0" label="If > 0, reference bands will be broken up at genomic positions that are multiples of this number" help="-breakBandsAtMultiplesOf,&#8209;&#8209;breakBandsAtMultiplesOf &amp;lt;breakBandsAtMultiplesOf&amp;gt;" />
+
+        </expand>
+
+    </xml>
+
+    <xml name="CombineGVCFsOutput">
+        <data format="vcf" name="cg_output_gvcf" label="${tool.name} - ${analysis_type.analysis_type_selector} on ${on_string} (gVCF)">
+            <yield />
+        </data>
+    </xml>
+
+    <template name="CombineGVCFsPreprocessing">
+<![CDATA[
+        @token_gvcf_input_pre@
+]]>
+    </template>
+
+    <template name="CombineGVCFsOptions">
+<![CDATA[
+        --out ${cg_output_gvcf}
+
+        @token_gvcf_input@
+
+        #set $optionals = $analysis_type.optional_parameters
+        #if $optionals.optional_parameters_enabled
+            #if $optionals.breakBandsAtMultiplesOf > 0
+                --breakBandsAtMultiplesOf $optionals.breakBandsAtMultiplesOf
+            #end if
+        #end if
+]]>
+    </template>
+
+
+</macros>
+
+

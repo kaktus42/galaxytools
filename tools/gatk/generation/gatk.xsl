@@ -8,7 +8,7 @@
 
 <xsl:template match="/">
 
-<tool id="gatk" name="GATK" version="@VERSION@.d3">
+<tool id="gatk" name="GATK" version="@VERSION@.d4">
     <description>tool collection Version @VERSION@</description>
 
     <macros>

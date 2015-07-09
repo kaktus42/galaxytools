@@ -22,7 +22,7 @@
     </token>
     <token name="@THREADS@">
 <![CDATA[
-        --num_threads \${GALAXY_SLOTS:-4}
+        --num_threads \${SLURM_CPUS_PER_TASK:-1}
 ]]>
     </token>
 

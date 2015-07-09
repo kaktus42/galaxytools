@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tool id="gatk" name="GATK" version="@VERSION@.d3">
+<tool id="gatk" name="GATK" version="@VERSION@.d4">
   <description>tool collection Version @VERSION@</description>
   <macros>
     <import>gatk_macros.xml</import>
@@ -10,6 +10,7 @@
     <import>print_reads.xml</import>
     <import>haplotype_caller.xml</import>
     <import>genotype_gvcfs.xml</import>
+    <import>combine_gvcfs.xml</import>
   </macros>
   <stdio>
     <regex match="^INFO" level="log"/>
@@ -94,6 +95,7 @@
         <option value="PrintReads">PrintReads</option>
         <option value="HaplotypeCaller">HaplotypeCaller</option>
         <option value="GenotypeGVCFs">GenotypeGVCFs</option>
+        <option value="CombineGVCFs">CombineGVCFs</option>
       </param>
       <when value="RealignerTargetCreator">
         <expand macro="RealignerTargetCreatorParameters" tag="rtc"/>
@@ -115,6 +117,9 @@
       </when>
       <when value="GenotypeGVCFs">
         <expand macro="GenotypeGVCFsParameters" tag="gg"/>
+      </when>
+      <when value="CombineGVCFs">
+        <expand macro="CombineGVCFsParameters" tag="cg"/>
       </when>
     </conditional>
   </inputs>
@@ -139,6 +144,9 @@
     </expand>
     <expand macro="GenotypeGVCFsOutput" tag="gg">
       <filter>analysis_type['analysis_type_selector'] == 'GenotypeGVCFs'</filter>
+    </expand>
+    <expand macro="CombineGVCFsOutput" tag="cg">
+      <filter>analysis_type['analysis_type_selector'] == 'CombineGVCFs'</filter>
     </expand>
     <data format="txt" name="output_log" label="${tool.name} - ${analysis_type.analysis_type_selector} on ${on_string} (log)"/>
   </outputs>
