@@ -12,7 +12,7 @@
     </xml>
 
     <xml name="CombineGVCFsOutput">
-        <data format="vcf" name="cg_output_gvcf" label="${tool.name} - ${analysis_type.analysis_type_selector} on ${on_string} (gVCF)">
+        <data format="vcf" name="cg_output_vcf" label="${tool.name} - ${analysis_type.analysis_type_selector} on ${on_string} (VCF)">
             <yield />
         </data>
     </xml>
@@ -25,7 +25,7 @@
 
     <template name="CombineGVCFsOptions">
 <![CDATA[
-        --out ${cg_output_gvcf}
+        --out ${cg_output_vcf}
 
         @token_gvcf_input@
 

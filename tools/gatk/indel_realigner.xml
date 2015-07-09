@@ -35,7 +35,7 @@
 
             <param name="maxReadsInMemory" type="integer" value="150000" label="max reads allowed to be kept in memory at a time by the SAMFileWriter" help="-maxInMemory,&#8209;&#8209;maxReadsInMemory &amp;lt;maxReadsInMemory&amp;gt;" />
 
-            <param name="noOriginalAlignmentTags" type="boolean" truevalue="&#8209;&#8209;noOriginalAlignmentTags" falsevalue="" label="Don't output the original cigar or alignment start tags for each realigned read in the output bam" help="-noTags,&#8209;&#8209;noOriginalAlignmentTags" />
+            <param name="noOriginalAlignmentTags" type="boolean" truevalue="--noOriginalAlignmentTags" falsevalue="" label="Don't output the original cigar or alignment start tags for each realigned read in the output bam" help="-noTags,&#8209;&#8209;noOriginalAlignmentTags" />
         </expand>
 
     </xml>

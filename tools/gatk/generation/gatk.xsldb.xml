@@ -48,4 +48,10 @@
 	    <tag>cg</tag>
 	    <macro_file>combine_gvcfs.xml</macro_file>
     </analysis>
+    <analysis>
+	    <name>CombineVariants</name>
+	    <input_type>vcf</input_type>
+	    <tag>cv</tag>
+	    <macro_file>combine_variants.xml</macro_file>
+    </analysis>
 </analyses>

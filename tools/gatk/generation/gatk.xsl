@@ -21,7 +21,8 @@
     <stdio>
         <regex match="^INFO" level="log" />
         <regex match="^WARN" level="warning" />
-        <regex match="Using un-vectorized C++ implementation of PairHMM" level="warning" />
+        <regex match="Using .* implementation of PairHMM" level="warning" />
+        <regex match="^##### ERROR" level="fatal" />
         <exit_code range="1:" level="fatal"/>
     </stdio>
 

@@ -11,11 +11,13 @@
     <import>haplotype_caller.xml</import>
     <import>genotype_gvcfs.xml</import>
     <import>combine_gvcfs.xml</import>
+    <import>combine_variants.xml</import>
   </macros>
   <stdio>
     <regex match="^INFO" level="log"/>
     <regex match="^WARN" level="warning"/>
-    <regex match="Using un-vectorized C++ implementation of PairHMM" level="warning"/>
+    <regex match="Using .* implementation of PairHMM" level="warning"/>
+    <regex match="^##### ERROR" level="fatal"/>
     <exit_code range="1:" level="fatal"/>
   </stdio>
   <command><![CDATA[
@@ -96,6 +98,7 @@
         <option value="HaplotypeCaller">HaplotypeCaller</option>
         <option value="GenotypeGVCFs">GenotypeGVCFs</option>
         <option value="CombineGVCFs">CombineGVCFs</option>
+        <option value="CombineVariants">CombineVariants</option>
       </param>
       <when value="RealignerTargetCreator">
         <expand macro="RealignerTargetCreatorParameters" tag="rtc"/>
@@ -120,6 +123,9 @@
       </when>
       <when value="CombineGVCFs">
         <expand macro="CombineGVCFsParameters" tag="cg"/>
+      </when>
+      <when value="CombineVariants">
+        <expand macro="CombineVariantsParameters" tag="cv"/>
       </when>
     </conditional>
   </inputs>
@@ -147,6 +153,9 @@
     </expand>
     <expand macro="CombineGVCFsOutput" tag="cg">
       <filter>analysis_type['analysis_type_selector'] == 'CombineGVCFs'</filter>
+    </expand>
+    <expand macro="CombineVariantsOutput" tag="cv">
+      <filter>analysis_type['analysis_type_selector'] == 'CombineVariants'</filter>
     </expand>
     <data format="txt" name="output_log" label="${tool.name} - ${analysis_type.analysis_type_selector} on ${on_string} (log)"/>
   </outputs>

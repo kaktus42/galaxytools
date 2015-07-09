@@ -26,6 +26,33 @@
 ]]>
     </token>
 
+
+    <xml name="macro_vcf_input" tokens="tag">
+        <param name="input" type="data" format="vcf" multiple="true" label="Variant files (VCF format)" help="-V, &#8209;&#8209;variant">
+            <validator type="unspecified_build" />
+            <validator type="dataset_metadata_in_data_table" table_name="picard_indexes" metadata_name="dbkey" metadata_column="dbkey" message="Sequences are not currently available for the specified build." /> 
+        </param>
+    </xml>
+    <token name="@token_vcf_input_pre@" tokens="tag">
+<![CDATA[
+        ############################
+        ## create links to gVCF input files with correct extensions
+        ############################
+        #for $i, $variant in enumerate($analysis_type.input):
+            ln -s -f ${variant} variant_${i}.vcf &&
+        #end for
+]]>
+    </token>
+    <token name="@token_vcf_input@">
+<![CDATA[
+        #for $i, $variant in enumerate($analysis_type.input):
+            --variant variant_${i}.vcf
+        #end for
+        @token_reference_input@
+]]>
+    </token>
+
+
     <xml name="macro_gvcf_input" tokens="tag">
         <param name="input" type="data" format="vcf" multiple="true" label="Variant files (gVCF format)" help="-V, &#8209;&#8209;variant">
             <validator type="unspecified_build" />
