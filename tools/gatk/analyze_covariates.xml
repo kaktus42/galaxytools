@@ -25,10 +25,10 @@
         --plotsReportFile                   ${ac_plotsReportFile}
 
         #if str($analysis_type.afterReportFile)
-            --afterReportFile $analysis_type.afterReportFile)
+            --afterReportFile $analysis_type.afterReportFile
         #end if
         #if str($analysis_type.beforeReportFile)
-            --beforeReportFile $analysis_type.beforeReportFile)
+            --beforeReportFile $analysis_type.beforeReportFile
         #end if
 ]]>
     </template>
