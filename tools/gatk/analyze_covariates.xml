@@ -1,11 +1,10 @@
 <macros>
     <xml name="AnalyzeCovariatesParameters" tokens="tag">
-        
-        <expand macro="macro_bam_input" tag="@TAG@" />
 
         <!-- BQSR in main config -->
 
         <param name="afterReportFile" type="data" format="table" optional="true" label="file containing the BQSR second-pass report file" help="-after,&#8209;&#8209;afterReportFile &amp;lt;afterReportFile&amp;gt;" />
+
         <param name="beforeReportFile" type="data" format="table" optional="true" label="file containing the BQSR first-pass report file" help="-before,&#8209;&#8209;beforeReportFile &amp;lt;beforeReportFile&amp;gt;" />
 
     </xml>
@@ -18,15 +17,12 @@
 
     <template name="AnalyzeCovariatesPreprocessing">
 <![CDATA[
-        @token_bam_input_pre@
 ]]>
     </template>
 
     <template name="AnalyzeCovariatesOptions">
 <![CDATA[
         --plotsReportFile                   ${ac_plotsReportFile}
-
-        @token_bam_input@
 
         #if str($analysis_type.afterReportFile)
             --afterReportFile $analysis_type.afterReportFile)
