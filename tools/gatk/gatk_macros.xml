@@ -5,7 +5,7 @@
             <requirement type="package">gatk</requirement>
             <requirement type="set_environment">GATK_PATH</requirement>
             <requirement type="set_environment">GATK_SITE_OPTIONS</requirement>
-            <yield />
+            <requirement type="package" version="3.1.2.0">package_r_for_gatk_3_4_0</requirement>
         </requirements>
     </xml>
 
@@ -79,23 +79,47 @@
     </token>
 
     <xml name="macro_bam_input">
-        <param name="input" type="data" format="bam" label="Input file containing sequence data (BAM)" help="-I, ‑‑input_file">
-          <validator type="unspecified_build"/>
-          <validator type="dataset_metadata_in_data_table" table_name="picard_indexes" metadata_name="dbkey" metadata_column="dbkey" message="Sequences are not currently available for the specified build."/>
-        </param>
+        <conditional name="cond_bam_input">
+            <param name="all_in_one" type="boolean" value="false" label="Input all BAM files in a single command" />
+            <when value="true">
+                <param name="input" type="data" format="bam" multiple="true" label="Input file containing sequence data (BAM)" help="-I, ‑‑input_file">
+                    <validator type="unspecified_build"/>
+                    <validator type="dataset_metadata_in_data_table" table_name="picard_indexes" metadata_name="dbkey" metadata_column="dbkey" message="Sequences are not currently available for the specified build."/>
+                </param>
+            </when>
+            <when value="false">
+                <param name="input" type="data" format="bam" label="Input file containing sequence data (BAM)" help="-I, ‑‑input_file">
+                    <validator type="unspecified_build"/>
+                    <validator type="dataset_metadata_in_data_table" table_name="picard_indexes" metadata_name="dbkey" metadata_column="dbkey" message="Sequences are not currently available for the specified build."/>
+                </param>
+            </when>
+        </conditional>
     </xml>
     <token name="@token_bam_input_pre@">
 <![CDATA[
         ############################
         ## create links to bam input files with correct extensions
         ############################
-        ln -s -f ${analysis_type.input} input.bam &&
-        ln -s -f ${analysis_type.input.metadata.bam_index} input.bam.bai &&
+        #if $analysis_type.cond_bam_input.all_in_one
+            #for $i, $bam in enumerate($analysis_type.cond_bam_input.input):
+                ln -s -f ${bam} input_${i}.bam &&
+                ln -s -f ${bam.metadata.bam_index} input_${i}.bam.bai &&
+            #end for
+        #else
+            ln -s -f ${analysis_type.cond_bam_input.input} input.bam &&
+            ln -s -f ${analysis_type.cond_bam_input.input.metadata.bam_index} input.bam.bai &&
+        #end if
 ]]>
     </token>
     <token name="@token_bam_input@">
 <![CDATA[
-        --input_file            input.bam
+        #if $analysis_type.cond_bam_input.all_in_one
+            #for $i, $bam in enumerate($analysis_type.cond_bam_input.input):
+                --input_file input_${i}.bam
+            #end for
+        #else
+            --input_file            input.bam
+        #end if
         @token_reference_input@
 ]]>
     </token>

@@ -8,7 +8,7 @@
 
 <xsl:template match="/">
 
-<tool id="gatk" name="GATK" version="@VERSION@.d5">
+<tool id="gatk" name="GATK" version="@VERSION@.d6">
     <description>tool collection Version @VERSION@</description>
 
     <macros>
@@ -17,6 +17,8 @@
         <import><xsl:value-of select="macro_file" /></import>
         </xsl:for-each>
     </macros>
+
+    <expand macro="requirements" />
 
     <stdio>
         <regex match="^INFO" level="log" />

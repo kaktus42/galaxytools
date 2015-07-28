@@ -16,6 +16,9 @@
     <template name="BaseRecalibratorPreprocessing">
 <![CDATA[
         @token_bam_input_pre@
+        #for $i, $variant in enumerate($analysis_type.knownSites):
+            ln -s -f ${variant} variant_${i}.vcf &&
+        #end for
 ]]>
     </template>
 
@@ -25,8 +28,8 @@
 
         @token_bam_input@
 
-        #for $knownSite in $analysis_type.optional_parameters.knownSites:
-            --knownSites ${knownSite}
+        #for $i, $variant in enumerate($analysis_type.knownSites):
+            --knownSites variant_${i}.vcf
         #end for
 ]]>
     </template>
