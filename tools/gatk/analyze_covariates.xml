@@ -3,9 +3,9 @@
 
         <!-- BQSR in main config -->
 
-        <param name="afterReportFile" type="data" format="table" optional="true" label="file containing the BQSR second-pass report file" help="-after,&#8209;&#8209;afterReportFile &amp;lt;afterReportFile&amp;gt;" />
+        <param name="afterReportFile" type="data" format="tabular" optional="true" label="file containing the BQSR second-pass report file" help="-after,&#8209;&#8209;afterReportFile &amp;lt;afterReportFile&amp;gt;" />
 
-        <param name="beforeReportFile" type="data" format="table" optional="true" label="file containing the BQSR first-pass report file" help="-before,&#8209;&#8209;beforeReportFile &amp;lt;beforeReportFile&amp;gt;" />
+        <param name="beforeReportFile" type="data" format="tabular" optional="true" label="file containing the BQSR first-pass report file" help="-before,&#8209;&#8209;beforeReportFile &amp;lt;beforeReportFile&amp;gt;" />
 
     </xml>
 

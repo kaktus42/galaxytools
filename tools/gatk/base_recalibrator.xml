@@ -8,7 +8,7 @@
     </xml>
 
     <xml name="BaseRecalibratorOutput">
-        <data format="table" name="br_table" label="${tool.name} - ${analysis_type.analysis_type_selector} on ${on_string} (Table)">
+        <data format="tabular" name="br_table" label="${tool.name} - ${analysis_type.analysis_type_selector} on ${on_string} (Table)">
             <yield />
         </data>
     </xml>

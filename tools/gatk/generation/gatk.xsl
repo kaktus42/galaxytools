@@ -8,7 +8,7 @@
 
 <xsl:template match="/">
 
-<tool id="gatk" name="GATK" version="@VERSION@.d6">
+<tool id="gatk" name="GATK" version="@VERSION@.d7">
     <description>tool collection Version @VERSION@</description>
 
     <macros>
@@ -100,7 +100,7 @@
         <conditional name="cond_BQSR">
             <param name="cond_BQSR_enabled" type="boolean" label="Select covariates for on-the-fly recalibration?" />
             <when value="true">
-                <param name="BQSR" type="data" format="table" label="Input covariates table file for on-the-fly base quality score recalibration" help="-BQSR,&#8209;&#8209;BQSR &amp;lt;BQSR&amp;gt; intended primarily for use with BaseRecalibrator and PrintReads" />
+                <param name="BQSR" type="data" format="tabular" label="Input covariates table file for on-the-fly base quality score recalibration" help="-BQSR,&#8209;&#8209;BQSR &amp;lt;BQSR&amp;gt; intended primarily for use with BaseRecalibrator and PrintReads" />
             </when>
             <when value="false" />
         </conditional>
