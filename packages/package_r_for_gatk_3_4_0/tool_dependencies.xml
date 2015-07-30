@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<tool_dependency>
+    <package name="R" version="3.1.2">
+        <repository name="package_r_3_1_2" owner="iuc" prior_installation_required="True" />
+    </package>
+    <package name="package_r_for_gatk_3_4_0" version="3.1.2.0">
+        <install version="1.0">
+            <actions>
+                <action type="setup_r_environment">
+
+                    <repository name="package_r_3_1_2" owner="iuc">
+                        <package name="R" version="3.1.2" />
+                    </repository>
+                    <package>https://cran.r-project.org/src/contrib/stringi_0.5-5.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/magrittr_1.5.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/stringr_1.0.0.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/RColorBrewer_1.1-2.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/dichromat_2.0-0.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/colorspace_1.2-6.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/munsell_0.4.2.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/labeling_0.3.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/Archive/Rcpp/Rcpp_0.11.6.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/digest_0.6.8.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/gtable_0.1.2.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/bitops_1.0-6.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/caTools_1.17.1.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/gtools_3.5.0.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/gdata_2.17.0.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/gsalib_2.1.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/gplots_2.17.0.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/plyr_1.8.3.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/reshape_0.8.5.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/reshape2_1.4.1.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/scales_0.2.5.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/proto_0.3-10.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/MASS_7.3-43.tar.gz</package>
+                    <package>https://cran.r-project.org/src/contrib/ggplot2_1.0.1.tar.gz</package>
+                </action>
+            </actions>
+        </install>
+        <readme>
+            ggplot2 is a plotting system for R, based on the grammar of graphics, which tries to take the good parts of base and lattice graphics and none of the bad parts.
+            It takes care of many of the fiddly details that make plotting a hassle (like drawing legends) as well as providing a powerful model of graphics that makes it easy to produce complex multi-layered graphics.
+
+            http://ggplot2.org/
+        </readme>
+    </package>
+</tool_dependency>
