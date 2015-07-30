@@ -18,6 +18,7 @@
     <regex match="^INFO" level="log"/>
     <regex match="^WARN" level="warning"/>
     <regex match="Using .* implementation of PairHMM" level="warning"/>
+    <regex match="There is insufficient memory for the Java Runtime Environment to continue" level="fatal"/>
     <regex match="^##### ERROR" level="fatal"/>
     <exit_code range="1:" level="fatal"/>
   </stdio>
