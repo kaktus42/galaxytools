@@ -17,15 +17,20 @@
     <token name="@OUTPUT_NAME_PREFIX@">${tool.name} - ${analysis_type.analysis_type_selector}</token>
     <token name="@GATK_EXEC@">
 <![CDATA[
-        java -Xmx\${SLURM_MEM_PER_CPU:-4096}M -jar "\$GATK_PATH/GenomeAnalysisTK.jar"
+        #if $cond_threads.cond_threads_enabled:
+            #if int($cond_threads.nct) > 1:
+                THREAD_STRING="-nct $cond_threads.nct" &&
+            #end if
+            #if int($cond_threads.nt) > 1:
+                THREAD_STRING=$THREAD_STRING" -nt $cond_threads.nt" &&
+            #end if
+            #if int($cond_threads.mem) > 0:
+                GATK_MEM=$cond_threads.mem &&
+            #end if
+        #end if
+        java -Xmx\${GATK_MEM:-\${SLURM_MEM_PER_NODE:-4096}}M -jar "\$GATK_PATH/GenomeAnalysisTK.jar" \${THREAD_STRING:-}
 ]]>
     </token>
-    <token name="@THREADS@">
-<![CDATA[
-        --num_threads \${SLURM_CPUS_PER_TASK:-1}
-]]>
-    </token>
-
 
     <xml name="macro_vcf_input" tokens="tag">
         <param name="input" type="data" format="vcf" multiple="true" label="Variant files (VCF format)" help="-V, &#8209;&#8209;variant">

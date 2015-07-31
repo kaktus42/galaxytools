@@ -8,7 +8,7 @@
 
 <xsl:template match="/">
 
-<tool id="gatk" name="GATK" version="@VERSION@.d7">
+<tool id="gatk" name="GATK" version="@VERSION@.d8">
     <description>tool collection Version @VERSION@</description>
 
     <macros>
@@ -102,6 +102,16 @@
             <param name="cond_BQSR_enabled" type="boolean" label="Select covariates for on-the-fly recalibration?" />
             <when value="true">
                 <param name="BQSR" type="data" format="tabular" label="Input covariates table file for on-the-fly base quality score recalibration" help="-BQSR,&#8209;&#8209;BQSR &amp;lt;BQSR&amp;gt; intended primarily for use with BaseRecalibrator and PrintReads" />
+            </when>
+            <when value="false" />
+        </conditional>
+
+        <conditional name="cond_threads">
+            <param name="cond_threads_enabled" type="boolean" label="Set computational options (cpu, mem)?" />
+            <when value="true">
+                <param name="nt" type="integer" value="1" label="Number of data threads to allocate to this analysis" help="make sure, the option is available for the chosen tool" />
+                <param name="nct" type="integer" value="1" label="Number of CPU threads to allocate per data thread" help="make sure, the option is available for the chosen tool" />
+                <param name="mem" type="integer" value="0" label="Overwrite Memory in MB (0 = don't overwrite)" help="Overwrites all other defaults and might lead to crash the run. States mem per data thread" />
             </when>
             <when value="false" />
         </conditional>

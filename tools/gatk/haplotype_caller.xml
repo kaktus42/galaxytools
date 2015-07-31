@@ -46,7 +46,7 @@
         #set $usage_selector = $analysis_type.cond_usage.cond_usage_selector
         #set $usage = $analysis_type.cond_usage
 
-        #if $usage_selector == 'GVCF'
+        #if str($usage_selector) == 'GVCF'
             --emitRefConfidence "GVCF"
         #end if
 ]]>
