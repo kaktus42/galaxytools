@@ -45,7 +45,7 @@
     </xml>
 
     <xml name="CombineVariantsOutput">
-        <data format="vcf" name="cg_output_vcf" label="${tool.name} - ${analysis_type.analysis_type_selector} on ${on_string} (VCF)">
+        <data format="vcf" name="cv_output_vcf" label="${tool.name} - ${analysis_type.analysis_type_selector} on ${on_string} (VCF)">
             <yield />
         </data>
     </xml>
@@ -58,7 +58,7 @@
 
     <template name="CombineVariantsOptions">
 <![CDATA[
-        --out ${cg_output_vcf}
+        --out ${cv_output_vcf}
 
         @token_vcf_input@
 
