@@ -3,6 +3,7 @@ categories:
 - Tool Dependency Packages
 description: Contains a tool dependency definition that downloads and compiles R and packages required for GATK 3
 long_description: R and packages required for GATK 3
+remote_repository_url: https://github.com/kaktus42/galaxytools/tree/master/packages/package_r_for_gatk_3_4_0
 name: package_r_for_gatk_3_4_0
 owner: avowinkel
 type: tool_dependency_definition
