@@ -3,7 +3,7 @@
     <package name="R" version="3.1.2">
         <repository name="package_r_3_1_2" owner="iuc" prior_installation_required="True" />
     </package>
-    <package name="package_r_for_gatk_3_4_0" version="3.1.2.0">
+    <package name="package_r_for_gatk_3_4_0" version="3.1.2.1">
         <install version="1.0">
             <actions>
                 <action type="setup_r_environment">
@@ -11,30 +11,30 @@
                     <repository name="package_r_3_1_2" owner="iuc">
                         <package name="R" version="3.1.2" />
                     </repository>
-                    <package>https://cran.r-project.org/src/contrib/stringi_0.5-5.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/magrittr_1.5.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/stringr_1.0.0.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/RColorBrewer_1.1-2.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/dichromat_2.0-0.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/colorspace_1.2-6.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/munsell_0.4.2.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/labeling_0.3.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/Archive/Rcpp/Rcpp_0.11.6.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/digest_0.6.8.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/gtable_0.1.2.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/bitops_1.0-6.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/caTools_1.17.1.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/gtools_3.5.0.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/gdata_2.17.0.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/gsalib_2.1.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/gplots_2.17.0.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/plyr_1.8.3.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/reshape_0.8.5.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/reshape2_1.4.1.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/scales_0.2.5.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/proto_0.3-10.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/MASS_7.3-43.tar.gz</package>
-                    <package>https://cran.r-project.org/src/contrib/ggplot2_1.0.1.tar.gz</package>
+                    <package>https://github.com/cran/stringi/archive/0.5-5.tar.gz</package>
+                    <package>https://github.com/cran/magrittr/archive/1.5.tar.gz</package>
+                    <package>https://github.com/cran/stringr/archive/1.0.0.tar.gz</package>
+                    <package>https://github.com/cran/RColorBrewer/archive/1.1-2.tar.gz</package>
+                    <package>https://github.com/cran/dichromat/archive/2.0-0.tar.gz</package>
+                    <package>https://github.com/cran/colorspace/archive/1.2-6.tar.gz</package>
+                    <package>https://github.com/cran/munsell/archive/0.4.2.tar.gz</package>
+                    <package>https://github.com/cran/labeling/archive/0.3.tar.gz</package>
+                    <package>https://github.com/cran/Rcpp/archive/0.11.6.tar.gz</package>
+                    <package>https://github.com/cran/digest/archive/0.6.8.tar.gz</package>
+                    <package>https://github.com/cran/gtable/archive/0.1.2.tar.gz</package>
+                    <package>https://github.com/cran/bitops/archive/1.0-6.tar.gz</package>
+                    <package>https://github.com/cran/caTools/archive/1.17.1.tar.gz</package>
+                    <package>https://github.com/cran/gtools/archive/3.5.0.tar.gz</package>
+                    <package>https://github.com/cran/gdata/archive/2.17.0.tar.gz</package>
+                    <package>https://github.com/cran/gsalib/archive/2.1.tar.gz</package>
+                    <package>https://github.com/cran/gplots/archive/2.17.0.tar.gz</package>
+                    <package>https://github.com/cran/plyr/archive/1.8.3.tar.gz</package>
+                    <package>https://github.com/cran/reshape/archive/0.8.5.tar.gz</package>
+                    <package>https://github.com/cran/reshape2/archive/1.4.1.tar.gz</package>
+                    <package>https://github.com/cran/scales/archive/0.2.5.tar.gz</package>
+                    <package>https://github.com/cran/proto/archive/0.3-10.tar.gz</package>
+                    <package>https://github.com/cran/MASS/archive/7.3-43.tar.gz</package>
+                    <package>https://github.com/cran/ggplot2/archive/1.0.1.tar.gz</package>
                 </action>
             </actions>
         </install>
