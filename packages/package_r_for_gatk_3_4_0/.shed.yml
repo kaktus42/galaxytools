@@ -1,0 +1,8 @@
+categories:
+- Graphics
+- Tool Dependency Packages
+description: Contains a tool dependency definition that downloads and compiles R and packages required for GATK 3
+long_description: R and packages required for GATK 3
+name: package_r_for_gatk_3_4_0
+owner: avowinkel
+type: tool_dependency_definition
