@@ -5,7 +5,7 @@
             <requirement type="package">gatk</requirement>
             <requirement type="set_environment">GATK_PATH</requirement>
             <requirement type="set_environment">GATK_SITE_OPTIONS</requirement>
-            <requirement type="package" version="3.1.2.0">package_r_for_gatk_3_4_0</requirement>
+            <requirement type="package" version="3.1.2.1">package_r_for_gatk_3_4_0</requirement>
         </requirements>
     </xml>
 
