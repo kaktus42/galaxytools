@@ -1,0 +1,5 @@
+Installation note:
+A GATK license needs to be obtained separately from the Broad Institute (https://www.broadinstitute.org/gatk/)
+to be able to use this tool. Once the license is obtained, the GATK Jar file must then be downloaded and moved 
+to /mnt/galaxy/tools/GATK/x.x-x on the server. Substitute the appropriate version number in the file path. 
+Be sure to download the correct version of the Jar file for the toolshed version installed.
